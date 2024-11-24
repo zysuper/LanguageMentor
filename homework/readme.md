@@ -9,8 +9,8 @@
 1. 调整提示词，使其能够稳定的按要求返回教学指导。
 2. 增加了 example 的输出，方便统一对话格式。
 
-[调整后的 Prompt <-- 点这里](../prompts/conversation_prompt.md)
-[运行的日志 <-- 点这里](../logs/app.log)
+- [调整后的 Prompt <-- 点这里](../prompts/conversation_prompt.md)
+- [运行的日志 <-- 点这里](../logs/app.log)
 
 ## 运行效果
 
