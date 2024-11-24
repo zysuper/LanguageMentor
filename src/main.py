@@ -40,7 +40,7 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
         gr.Markdown("## 练习英语对话 ")
         conversation_chatbot = gr.Chatbot(
             placeholder="<strong>你的英语私教 DjangoPeng</strong><br><br>想和我聊什么话题都可以，记得用英语哦！",
-            height=800,
+            height=700,
         )
 
         gr.ChatInterface(
