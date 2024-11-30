@@ -2,17 +2,19 @@ import gradio as gr  # 导入 Gradio 库，用于构建用户界面
 from agents.conversation_agent import ConversationAgent  # 导入对话代理类
 from agents.scenario_agent import ScenarioAgent  # 导入场景代理类
 from utils.logger import LOG  # 导入日志记录工具
-
+from utils.llm_loader import LLMLoader  # 导入LLM加载器
 # 创建对话代理实例
 conversation_agent = ConversationAgent()
 
+# 创建LLM加载器实例
+llm_loader = LLMLoader()
+
+# 当前场景代理实例
+current_agent = None
+
 # 定义场景代理的选择与调用
-agents = {
-    "job_interview": ScenarioAgent("job_interview"),  # 求职面试场景代理
-    "hotel_checkin": ScenarioAgent("hotel_checkin"),  # 酒店入住场景代理
-    # "salary_negotiation": ScenarioAgent("salary_negotiation"),  # 薪资谈判场景代理（注释掉）
-    # "renting": ScenarioAgent("renting")  # 租房场景代理（注释掉）
-}
+def create_scenario_agent(scenario_name, model_name):
+    return ScenarioAgent(llm_loader, scenario_name, model_name)
 
 # 处理用户对话的函数
 def handle_conversation(user_input, chat_history):
@@ -28,13 +30,19 @@ def get_scenario_intro(scenario):
 
 # 场景代理处理函数，根据选择的场景调用相应的代理
 def handle_scenario(user_input, chat_history, scenario):
-    bot_message = agents[scenario].chat_with_history(user_input)  # 获取场景代理的回复
+    bot_message = current_agent.chat_with_history(user_input)  # 获取场景代理的回复
     LOG.info(f"[ChatBot]: {bot_message}")  # 记录场景代理的回复
     return bot_message  # 返回场景代理的回复
 
 # Gradio 界面构建
 with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
     with gr.Tab("场景训练"):  # 场景训练标签
+        gr.Markdown("## 选择一个模型")  # 模型选择说明
+        model_names_radio = gr.Radio(
+            choices= llm_loader.list_models(),
+            label="模型"
+        )
+        
         gr.Markdown("## 选择一个场景完成目标和挑战")  # 场景选择说明
 
         # 创建单选框组件
@@ -42,7 +50,7 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
             choices=[
                 ("求职面试", "job_interview"),  # 求职面试选项
                 ("酒店入住", "hotel_checkin"),  # 酒店入住选项
-                # ("薪资谈判", "salary_negotiation"),  # 薪资谈判选项（注释掉）
+                ("薪资谈判", "salary_negotiation"),  # 薪资谈判选项
                 # ("租房", "renting")  # 租房选项（注释掉）
             ], 
             label="场景"  # 单选框标签
@@ -55,19 +63,36 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
         )
 
         # 获取场景介绍并启动新会话的函数
-        def start_new_scenario_chatbot(scenario):
-            initial_ai_message = agents[scenario].start_new_session()  # 启动新会话并获取初始AI消息
+        def start_new_scenario_chatbot(scenario, model_name):
+            global current_agent
+            current_agent = create_scenario_agent(scenario, model_name)
+            initial_ai_message = current_agent.start_new_session()  # 启动新会话并获取初始AI消息
 
             return gr.Chatbot(
                 value=[(None, initial_ai_message)],  # 设置聊天机器人的初始消息
                 height=600,  # 聊天窗口高度
             )
         
+        # 更新当前场景代理的函数
+        def change_current_agent(scenario, model_name):
+            global current_agent
+            current_agent = create_scenario_agent(scenario, model_name)
+        
         # 更新场景介绍并在场景变化时启动新会话
+        def update_scenario(scenario, model_name):
+            if not model_name:
+                raise gr.Error("请先选择一个模型")
+            return get_scenario_intro(scenario), start_new_scenario_chatbot(scenario, model_name)
+
         scenario_radio.change(
-            fn=lambda s: (get_scenario_intro(s), start_new_scenario_chatbot(s)),  # 更新场景介绍和聊天机器人
-            inputs=scenario_radio,  # 输入为选择的场景
+            fn=update_scenario,  # 更新场景介绍和聊天机器人
+            inputs=[scenario_radio, model_names_radio],  # 输入为选择的场景和模型
             outputs=[scenario_intro, scenario_chatbot],  # 输出为场景介绍和聊天机器人组件
+        )
+
+        model_names_radio.change(
+            fn=lambda m: change_current_agent(m),  # 更新聊天机器人
+            inputs=[scenario_radio, model_names_radio], # 输入为场景选择和模型选择
         )
 
         # 场景聊天界面
