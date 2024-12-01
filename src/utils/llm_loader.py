@@ -1,6 +1,6 @@
 import yaml
 import os
-from langchain_openai import ChatOpenAI 
+from langchain_openai import ChatOpenAI
 from langchain_ollama.chat_models import ChatOllama  # 导入 ChatOllama 模型
 from loguru import logger
 
@@ -25,7 +25,7 @@ class LLMLoader:
                 model_name = model_config.get('model_name')
                 
                 if model_type == 'openai':
-                    base_url = model_config.get('base_url', 'https://api.openai-hk.com')
+                    base_url = model_config.get('base_url', 'https://api.openai-hk.com/v1')
 
                     self.models[model_name] = ChatOpenAI(
                         model_name=model_name,

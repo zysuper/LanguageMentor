@@ -39,8 +39,9 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
     with gr.Tab("场景训练"):  # 场景训练标签
         gr.Markdown("## 选择一个模型")  # 模型选择说明
         model_names_radio = gr.Radio(
-            choices= llm_loader.list_models(),
-            label="模型"
+            choices=llm_loader.list_models(),
+            label="模型",
+            value=llm_loader.list_models()[0]  # 默认选中第一个选项
         )
         
         gr.Markdown("## 选择一个场景完成目标和挑战")  # 场景选择说明
@@ -51,7 +52,7 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
                 ("求职面试", "job_interview"),  # 求职面试选项
                 ("酒店入住", "hotel_checkin"),  # 酒店入住选项
                 ("薪资谈判", "salary_negotiation"),  # 薪资谈判选项
-                # ("租房", "renting")  # 租房选项（注释掉）
+                ("单位请假", "leave_request"),  # 单位请假选项
             ], 
             label="场景"  # 单选框标签
         )
@@ -76,6 +77,8 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
         # 更新当前场景代理的函数
         def change_current_agent(scenario, model_name):
             global current_agent
+            if scenario is None or model_name is None:
+                return
             current_agent = create_scenario_agent(scenario, model_name)
         
         # 更新场景介绍并在场景变化时启动新会话
@@ -91,7 +94,7 @@ with gr.Blocks(title="LanguageMentor 英语私教") as language_mentor_app:
         )
 
         model_names_radio.change(
-            fn=lambda m: change_current_agent(m),  # 更新聊天机器人
+            fn=lambda s,m: change_current_agent(s, m),  # 更新聊天机器人
             inputs=[scenario_radio, model_names_radio], # 输入为场景选择和模型选择
         )
 
