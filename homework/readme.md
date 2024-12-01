@@ -29,7 +29,7 @@
 
 #### 配置管理功能
 
-- [模型配置功能代码跳转 <-- 点这里](../src/config/llm_loader.py)
+- [模型配置功能代码跳转 <-- 点这里](../src/utils/llm_loader.py)
 - [agent 代码改造跳转 <-- 点这里](../src/agents/scenario_agent.py#L13)
 
 
