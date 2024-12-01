@@ -13,15 +13,15 @@
 
 #### 薪酬谈判场景
 
-[薪酬谈判场景提示词跳转 <-- 点这里](../prompts/salary_negotiation_prompt.txt)
-[薪资谈判场景开场白配置跳转 <-- 点这里](../content/intro/salary_negotiation.json)
-[薪资谈判场景对话提示配置跳转 <-- 点这里](../content/page/salary_negotiation.md)
+- [薪酬谈判场景提示词跳转 <-- 点这里](../prompts/salary_negotiation_prompt.txt)
+- [薪资谈判场景开场白配置跳转 <-- 点这里](../content/intro/salary_negotiation.json)
+- [薪资谈判场景对话提示配置跳转 <-- 点这里](../content/page/salary_negotiation.md)
 
 #### 单位请假场景
 
-[单位请假场景提示词跳转 <-- 点这里](../prompts/leave_request_prompt.txt)
-[单位请假场景开场白配置跳转 <-- 点这里](../content/intro/leave_request.json)
-[单位请假场景对话提示配置跳转 <-- 点这里](../content/page/leave_request.md)
+- [单位请假场景提示词跳转 <-- 点这里](../prompts/leave_request_prompt.txt)
+- [单位请假场景开场白配置跳转 <-- 点这里](../content/intro/leave_request.json)
+- [单位请假场景对话提示配置跳转 <-- 点这里](../content/page/leave_request.md)
 
 ![单位请假场景](./imgs/leave_request.png)
 
@@ -29,7 +29,7 @@
 
 #### 配置管理功能
 
-[模型配置功能代码跳转 <-- 点这里](../src/config/llm_loader.py)
-[agent 代码改造跳转 <-- 点这里](../src/agents/scenario_agent.py#L13)
+- [模型配置功能代码跳转 <-- 点这里](../src/config/llm_loader.py)
+- [agent 代码改造跳转 <-- 点这里](../src/agents/scenario_agent.py#L13)
 
 
