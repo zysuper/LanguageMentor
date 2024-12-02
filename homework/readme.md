@@ -18,13 +18,13 @@ Name                               Stmts   Miss  Cover   Missing
 src/agents/__init__.py                 0      0   100%
 src/agents/agent_base.py              41      1    98%   43
 src/agents/conversation_agent.py       7      0   100%
-src/agents/scenario_agent.py          20      1    95%   43
+src/agents/scenario_agent.py          20      0   100%
 src/agents/session_history.py          6      0   100%
 src/agents/vocab_agent.py             14      0   100%
 src/main.py                           13     13     0%   1-17
 src/utils/logger.py                   10      0   100%
 ----------------------------------------------------------------
-TOTAL                                111     15    86%
+TOTAL                                111     14    87%
 ```
 
 相关代码：
