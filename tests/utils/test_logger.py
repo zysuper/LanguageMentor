@@ -1,17 +1,16 @@
 import pytest
 import os
-from loguru import logger
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
 from utils.logger import LOG
 
 class TestLogger:
     """logger 模块的测试用例"""
 
-    @pytest.fixture(autouse=True)
+    @pytest.fixture(scope="class", autouse=True)
     def setup_and_cleanup(self):
         """设置和清理测试环境"""
         # 确保日志目录存在
@@ -41,6 +40,7 @@ class TestLogger:
 
     def test_log_format(self):
         """测试日志格式"""
+        # 多写点，强迫一定冲刷到文件
         test_message = "Test log format"
         LOG.info(test_message)
         
@@ -56,7 +56,7 @@ class TestLogger:
     def test_log_rotation(self):
         """测试日志轮换"""
         # 写入大量日志以触发轮换
-        large_message = "x" * 1000  # 1KB 消息
+        large_message = "x" * 1024  # 1KB 消息
         for _ in range(1100):  # 写入超过 1MB 的日志
             LOG.debug(large_message)
         

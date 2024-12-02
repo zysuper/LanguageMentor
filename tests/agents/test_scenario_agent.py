@@ -4,7 +4,7 @@ from langchain_core.messages import AIMessage
 
 import os
 import sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
 from agents.scenario_agent import ScenarioAgent
 
@@ -19,7 +19,7 @@ class TestScenarioAgent:
     @pytest.fixture
     def mock_intro_file(self):
         """模拟介绍文件内容"""
-        return '[{"role": "assistant", "content": "Hello"}, {"role": "assistant", "content": "Hi"}]'
+        return """["Hello", "Hi"]"""
 
     @pytest.fixture
     def mock_session_history(self):
@@ -46,6 +46,7 @@ class TestScenarioAgent:
         mock_history = MagicMock()
         mock_history.messages = []
         mock_get_history.return_value = mock_history
+        mock_history.add_message = MagicMock()
 
         with patch("builtins.open") as mock_file:
             mock_file.side_effect = [

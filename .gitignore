@@ -164,3 +164,4 @@ cython_debug/
 jupyter/*
 
 .conda/
+.vscode/
